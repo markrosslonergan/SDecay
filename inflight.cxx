@@ -53,7 +53,7 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	//sterile data. 
 	phiS = 2.0*M_PI*gsl_rng_uniform(r);
 
-	//At the moment I package up the sterile prameters into an object here.
+	//At the moment I package up the sterile parameters into an object here.
 	//In future, it would be nice for getEvents to create an array/vector
 	//of such objects. Then the loop could just be steping through this
 	//array.
@@ -70,7 +70,7 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 //	resonantZprime_decayfunction(r, &Obs, nus, model_params); 
 	threebody_decayfunction(r, &Obs, nus, model_params); 
 
-	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low);
+	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
 }
 
 gsl_rng_free(r);

@@ -20,7 +20,9 @@ typedef struct OBSERVABLES {
 	double E_high; 
 	double Th_high; 
 	double E_low; 
-	double Th_low; } OBSERVABLES;
+	double Th_low; 
+	double FS_AngSep; //The foreshortened angular separation.
+	} OBSERVABLES;
 
 struct PDF_CHOICE { 
 	double Enu; 
