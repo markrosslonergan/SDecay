@@ -3,7 +3,7 @@
 *.dat
 *.out
 
-inflight 
+inflight
 
 examples/*
 examples 
