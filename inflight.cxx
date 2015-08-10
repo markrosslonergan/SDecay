@@ -17,6 +17,8 @@
 			// about. I intend this to become a class; and each channel can then become a 
 			// derived class.
 
+#include "channel.h"
+
 #define NUMEVENTS 200000
 
 /* ########## Main function ############### */
@@ -43,6 +45,9 @@ model_params.push_back(mZprime);
 
 double phiS = 0.0;
 
+
+threebody CHAN(r, mZprime);
+
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
 int m; for(m=0;m<=NUMEVENTS-1;m++) 
@@ -68,9 +73,10 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	// At the moment, you comment out the one you don't want below:
 	//
 //	resonantZprime_decayfunction(r, &Obs, nus, model_params); 
-	threebody_decayfunction(r, &Obs, nus, model_params); 
+//	threebody_decayfunction(r, &Obs, nus, model_params); 
+	CHAN.decayfunction(nus);
 
-	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
+//	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
 }
 
 gsl_rng_free(r);
