@@ -115,10 +115,10 @@ int computeLabFrameVariables(OBSERVABLES * output, double mS, double Es, double 
 
 	double Pplus_E = gamma*(Ee + beta*Pe*cos(theta_plus));
 	double Pminus_E = gamma*(Ee + beta*Pe*cos(theta_minus));
-	double Pplus_x = Pe*cos(theta_plus)*cos(Phi);
-	double Pminus_x = Pe*cos(theta_minus)*cos(Phi);
-	double Pplus_y = Pe*cos(theta_plus)*sin(Phi);
-	double Pminus_y = Pe*cos(theta_minus)*sin(Phi);
+	double Pplus_x = Pe*sin(theta_plus)*cos(Phi);
+	double Pminus_x = Pe*sin(theta_minus)*cos(Phi);
+	double Pplus_y = Pe*sin(theta_plus)*sin(Phi);
+	double Pminus_y = Pe*sin(theta_minus)*sin(Phi);
 	double Pplus_z = gamma*(Pe*cos(theta_plus) + beta*Ee);
 	double Pminus_z = gamma*(Pe*cos(theta_minus) + beta*Ee);
 
