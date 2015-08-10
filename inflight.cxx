@@ -12,7 +12,7 @@
 #include "sterile_flux.h" // Defines getEvents, and describes a class whose objects denote a single 
 			  // incoming sterile (mass, fourmomentum).
 
-#include "decay.h" 	// include functions for turning sterile event objects into
+//#include "decay.h" 	// include functions for turning sterile event objects into
 			// observables. Also, defines the structs used to store the variables we care
 			// about. I intend this to become a class; and each channel can then become a 
 			// derived class.
@@ -75,8 +75,10 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 //	resonantZprime_decayfunction(r, &Obs, nus, model_params); 
 //	threebody_decayfunction(r, &Obs, nus, model_params); 
 	CHAN.decayfunction(nus);
-
-//	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
+	CHAN.observables(&Obs);
+	Obs.E_sterile = nus.energy;
+	Obs.Th_sterile = nus.costhS;
+	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, cos(Obs.Th_sum), Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
 }
 
 gsl_rng_free(r);

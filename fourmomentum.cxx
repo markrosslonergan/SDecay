@@ -41,7 +41,9 @@ int fourmomentum::populate(double energy, std::vector<double> momentum)
 	modp = sqrt(p.at(0)*p.at(0) + p.at(1)*p.at(1) + p.at(2)*p.at(2));
 
 	mass = E*E - modp*modp; //Using mass as a temporary variable here. True value created a few lines down.
-	if(mass < 0){ std::cout<<"ERROR: 4-vector is spacelike. This isn't what we had agreed on!"<<std::endl; }
+	if(fabs(mass) < 1e-15){ mass = 0.0; }
+
+	if(mass < 0.0 ){ std::cout<<"ERROR: 4-vector is spacelike. This isn't what we had agreed on!"<<std::endl; }
 	else{ mass = sqrt(mass); }
 
 
@@ -50,7 +52,7 @@ int fourmomentum::populate(double energy, std::vector<double> momentum)
 int fourmomentum::print(std::string name)
 {
 
-std::cout<<"Fourvector '"<<name<<"'"<<" = ("<<E<<", "<<p.at(0)<<", "<<p.at(1)<<", "<<p.at(2)<<"),\t"<<"[Mass: "<<mass<<", Norm of 3-momentum: "<<modp<<"]"<<std::endl; 
+std::cout<<"Fourvector '"<<name<<"'"<<" = ("<<E<<", "<<p.at(0)<<", "<<p.at(1)<<", "<<p.at(2)<<"),\t"<<"[Inv. Mass^2: "<<mass<<", Norm of 3-momentum: "<<modp<<"]"<<std::endl; 
 
 return 0;
 }
