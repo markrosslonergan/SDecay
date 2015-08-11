@@ -120,24 +120,24 @@ double temp = 0.0;
 
 	//OBSERVABLES { double E_sum; double Th_sum; double AngSep; double E_sterile; double Th_sterile; double E_high; double Th_high; double E_low; double Th_low; } OBSERVABLES;
 	output->E_sum = SUM_FOURVEC[0];	
-	output->Th_sum = acos(fourvec_costheta(SUM_FOURVEC));	
-	output->AngSep = acos((EPLUS_FOURVEC[1]*EMINUS_FOURVEC[1] + EPLUS_FOURVEC[2]*EMINUS_FOURVEC[2] + EPLUS_FOURVEC[3]*EMINUS_FOURVEC[3])/( sqrt( EPLUS_FOURVEC[1]*EPLUS_FOURVEC[1] + EPLUS_FOURVEC[2]*EPLUS_FOURVEC[2] + EPLUS_FOURVEC[3]*EPLUS_FOURVEC[3])*sqrt( EMINUS_FOURVEC[1]*EMINUS_FOURVEC[1] + EMINUS_FOURVEC[2]*EMINUS_FOURVEC[2] + EMINUS_FOURVEC[3]*EMINUS_FOURVEC[3])));
+	output->Th_sum = (180.0/M_PI)*acos(fourvec_costheta(SUM_FOURVEC));	
+	output->AngSep = (180.0/M_PI)*acos((EPLUS_FOURVEC[1]*EMINUS_FOURVEC[1] + EPLUS_FOURVEC[2]*EMINUS_FOURVEC[2] + EPLUS_FOURVEC[3]*EMINUS_FOURVEC[3])/( sqrt( EPLUS_FOURVEC[1]*EPLUS_FOURVEC[1] + EPLUS_FOURVEC[2]*EPLUS_FOURVEC[2] + EPLUS_FOURVEC[3]*EPLUS_FOURVEC[3])*sqrt( EMINUS_FOURVEC[1]*EMINUS_FOURVEC[1] + EMINUS_FOURVEC[2]*EMINUS_FOURVEC[2] + EMINUS_FOURVEC[3]*EMINUS_FOURVEC[3])));
 
 	if(EMINUS_FOURVEC[3] > 0 && EPLUS_FOURVEC[3] > 0)
 	{
-		output->FS_AngSep = (180.0/M_PI)*fabs(atan(EPLUS_FOURVEC[1]/EPLUS_FOURVEC[3]) - atan(EPLUS_FOURVEC[1]/EMINUS_FOURVEC[3]));
+		output->FS_AngSep = (180.0/M_PI)*fabs(atan(EPLUS_FOURVEC[1]/EPLUS_FOURVEC[3]) - atan(EMINUS_FOURVEC[1]/EMINUS_FOURVEC[3]));
 	}
 	else 
 	{
-		output->FS_AngSep = 180 - (180.0/M_PI)*fabs(atan(EPLUS_FOURVEC[1]/EPLUS_FOURVEC[3]) - atan(EPLUS_FOURVEC[1]/EMINUS_FOURVEC[3]));
+		output->FS_AngSep = 180 - (180.0/M_PI)*fabs(atan(EPLUS_FOURVEC[1]/EPLUS_FOURVEC[3]) - atan(EMINUS_FOURVEC[1]/EMINUS_FOURVEC[3]));
 	}
 
 	output->E_sterile = S_E_lf;	
 	output->Th_sterile = S_costheta_lf;	
 	output->E_high = EPLUS_FOURVEC[0];	
-	output->Th_high = fourvec_costheta(EPLUS_FOURVEC);	
+	output->Th_high = (180.0/M_PI)*acos(fourvec_costheta(EPLUS_FOURVEC));	
 	output->E_low = EMINUS_FOURVEC[0];	
-	output->Th_low = fourvec_costheta(EMINUS_FOURVEC);	
+	output->Th_low = (180.0/M_PI)*acos(fourvec_costheta(EMINUS_FOURVEC));	
 	if(output->E_high < output->E_low)
 	{ 	
 		temp = output->E_low; 
