@@ -67,8 +67,8 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	//
 	// At the moment, you comment out the one you don't want below:
 	//
-//	resonantZprime_decayfunction(r, &Obs, nus, model_params); 
-	threebody_decayfunction(r, &Obs, nus, model_params); 
+	resonantZprime_decayfunction(r, &Obs, nus, model_params); 
+//	threebody_decayfunction(r, &Obs, nus, model_params); 
 
 	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
 }
