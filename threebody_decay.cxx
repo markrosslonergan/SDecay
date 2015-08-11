@@ -134,13 +134,13 @@ int computeLabFrameVariables(OBSERVABLES * output, double mS, double Es, double 
 	output->Th_sum = (180.0/M_PI)*acos(Pee[2]/sqrt(Pee[0]*Pee[0] + Pee[1]*Pee[1] + Pee[2]*Pee[2] )); 
 	output->AngSep = (180.0/M_PI)*acos((Pplus_x*Pminus_x + Pplus_y*Pminus_y + Pplus_z*Pminus_z)/(sqrt(Pplus_x*Pplus_x + Pplus_y*Pplus_y + Pplus_z*Pplus_z)*sqrt(Pminus_x*Pminus_x + Pminus_y*Pminus_y + Pminus_z*Pminus_z))); // opening angle is unaffected by rotation
 
-	if(Pminus_z > 0 && Pplus_z > 0)
+	if(Pminus[2] > 0 && Pplus[2] > 0)
 	{
-		output->FS_AngSep = (180.0/M_PI)*fabs(atan(Pplus_x/Pplus_z) - atan(Pminus_x/Pminus_z));
+		output->FS_AngSep = (180.0/M_PI)*fabs(atan(Pplus[0]/Pplus[2]) - atan(Pminus[0]/Pminus[2]));
 	}
 	else 
 	{
-		output->FS_AngSep = 180- (180.0/M_PI)*fabs(atan(Pplus_x/Pplus_z) - atan(Pminus_x/Pminus_z));
+		output->FS_AngSep = 180- (180.0/M_PI)*fabs(atan(Pplus[0]/Pplus[2]) - atan(Pminus[0]/Pminus[2]));
 	}
 
 	if(Pplus_E < Pminus_E)
