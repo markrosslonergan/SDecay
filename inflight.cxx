@@ -48,8 +48,8 @@ double phiS = 0.0;
 //
 // this is where we create an object for the channel that we want to use.
 //
-//threebody CHAN(r, model_params);
-Zprimeresonance CHAN(r, model_params);
+threebody CHAN(r, model_params);
+//Zprimeresonance CHAN(r, model_params);
 
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
