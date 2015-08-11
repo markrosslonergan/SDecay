@@ -45,7 +45,9 @@ model_params.push_back(mZprime);
 
 double phiS = 0.0;
 
-
+//
+// this is where we create an object for the channel that we want to use.
+//
 //threebody CHAN(r, model_params);
 Zprimeresonance CHAN(r, model_params);
 
@@ -65,16 +67,7 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	//array.
 	initial_sterile nus(mS, events[m][0], events[m][1], phiS);
 
-	//Here's the paradigm: decay_function(the allocated RNG, pointer to the
-	//observables desired, initial sterile, other model parameters e.g.
-	//mZprime); 
-	//
-	// decayfunction(r, &Obs, nus, model_params); 
-	//
-	// At the moment, you comment out the one you don't want below:
-	//
-//	resonantZprime_decayfunction(r, &Obs, nus, model_params); 
-//	threebody_decayfunction(r, &Obs, nus, model_params); 
+	//We call the appropriate functions from the channels.
 	CHAN.decayfunction(nus);
 	CHAN.observables(&Obs);
 
