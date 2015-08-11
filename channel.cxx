@@ -26,10 +26,12 @@ int twoIP_channel::observables(OBSERVABLES * output)
 	sum.populate(IP1.E + IP2.E, sum_p);
 
 	output->E_sum = sum.E;	
-	output->Th_sum = sum.direction().at(0);	
+	output->Th_sum =(180.0/M_PI)*sum.direction().at(0);	
 
-	output->AngSep = acos((IP1.p.at(0)*IP2.p.at(0) + IP1.p.at(1)*IP2.p.at(1) + IP1.p.at(2)*IP2.p.at(2))/(IP1.modp*IP2.modp)); 
+	output->AngSep =(180.0/M_PI)*acos((IP1.p.at(0)*IP2.p.at(0) + IP1.p.at(1)*IP2.p.at(1) + IP1.p.at(2)*IP2.p.at(2))/(IP1.modp*IP2.modp)); 
 
+//	IP1.print("IP1");
+//	IP2.print("IP2");
 
 	if(IP1.p.at(2) > 0 && IP2.p.at(2) > 0)
 	{
@@ -41,9 +43,9 @@ int twoIP_channel::observables(OBSERVABLES * output)
 	}
 
 	output->E_high = IP1.E;	
-	output->Th_high = IP1.direction().at(0);	
+	output->Th_high = (180.0/M_PI)*IP1.direction().at(0);	
 	output->E_low = IP2.E;	
-	output->Th_low = IP2.direction().at(0);	
+	output->Th_low = (180.0/M_PI)*IP2.direction().at(0);	
 
 	double temp = 0.0;
 	if(output->E_high < output->E_low)
@@ -56,6 +58,9 @@ int twoIP_channel::observables(OBSERVABLES * output)
 		output->Th_low = output->Th_high;
 		output->Th_high = temp;
 	}
+
+//	IP1.print("IP1");
+//	IP2.print("IP2");
 
 return 0;
 }
@@ -116,8 +121,7 @@ int threebody::computeLabFrameVariables(double mS, double Es, double costhS, dou
 	double Pminus_z = gamma*(Pe*cos(theta_minus) + beta*Ee);
 
 	double Pee[] = {(Pplus_x + Pminus_x)/2.0, (Pplus_y + Pminus_y)/2.0, (Pplus_z + Pminus_z)/2.0};
-//	double Pplus[] = {Pplus_x, Pplus_y, Pplus_z};
-	double Pplus[] = {0.0, 0.0, Pplus_E};
+	double Pplus[] = {Pplus_x, Pplus_y, Pplus_z};
 	double Pminus[] = {Pminus_x, Pminus_y, Pminus_z};
 
 //	std::cout<<"PplusNorm: "<<Pplus_E*Pplus_E - Pplus_x*Pplus_x - Pplus_y*Pplus_y - Pplus_z*Pplus_z<<std::endl;
@@ -126,13 +130,13 @@ int threebody::computeLabFrameVariables(double mS, double Es, double costhS, dou
 //	std::cout<<"Pp1: "<<Pplus[0]<<" Pp2: "<<Pplus[1]<<" Pp3: "<<Pplus[2]<<std::endl;
 //	std::cout<<"Pm1: "<<Pminus[0]<<" Pm2: "<<Pminus[1]<<" Pm3: "<<Pminus[2]<<std::endl;
 
-	std::vector<double> Vec_pplus(Pplus, Pplus + sizeof(Pplus)/sizeof(double));
-	std::vector<double> Vec_pminus(Pminus, Pminus + sizeof(Pminus)/sizeof(double));
+//	std::vector<double> Vec_pplus(Pplus, Pplus + sizeof(Pplus)/sizeof(double));
+//	std::vector<double> Vec_pminus(Pminus, Pminus + sizeof(Pminus)/sizeof(double));
 
-	IP1.populate(Pplus_E, Vec_pplus);
-//	IP1.print("IP1");
-	IP2.populate(Pminus_E, Vec_pminus);
-//	IP2.print("IP2");
+//	IP1.populate(Pplus_E, Vec_pplus);
+//	IP1.print("pre-rot IP1");
+//	IP2.populate(Pminus_E, Vec_pminus);
+//	IP2.print("pre-rot IP2");
 
 	rotor(acos(costhS),phiS,Pee);
 	rotor(acos(costhS),phiS,Pplus);
@@ -145,9 +149,9 @@ int threebody::computeLabFrameVariables(double mS, double Es, double costhS, dou
 	std::vector<double> Vec_pminus2(Pminus, Pminus + sizeof(Pminus)/sizeof(double));
 
 	IP1.populate(Pplus_E, Vec_pplus2);
-//	IP1.print("IP1");
+//	IP1.print("post-rot IP1");
 	IP2.populate(Pminus_E, Vec_pminus2);
-//	IP2.print("IP2");
+//	IP2.print("post-rot IP2");
 
 //std::cout<<std::endl;
 

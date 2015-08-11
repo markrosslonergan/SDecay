@@ -78,7 +78,8 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	CHAN.observables(&Obs);
 	Obs.E_sterile = nus.energy;
 	Obs.Th_sterile = nus.costhS;
-	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, cos(Obs.Th_sum), Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
+
+	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
 }
 
 gsl_rng_free(r);
