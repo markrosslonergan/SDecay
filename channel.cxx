@@ -1,6 +1,6 @@
 #include "channel.h"
 
-twoIP_channel::twoIP_channel(gsl_rng * g)
+twoIP_channel::twoIP_channel(gsl_rng * g, std::vector<double> input_params)
 {
 	std::vector<double> p;
 	p.push_back(0.0);	
@@ -10,6 +10,8 @@ twoIP_channel::twoIP_channel(gsl_rng * g)
 	IP1.populate(1,p);
 	IP2.populate(1,p);
 	
+	model_params = input_params;
+
 	r = g;
 }
 
@@ -75,9 +77,12 @@ return 0;
 
 //This is the nu_s \to \nu e+ e- channel (off-shell Zprime).
 
-threebody::threebody(gsl_rng *g, double mZ) : twoIP_channel(g)
+threebody::threebody(gsl_rng *g, std::vector<double> input) : twoIP_channel(g, input)
 {
-	model_params.push_back(mZ);
+	if(model_params.size() != 1)
+	{ 
+		std::cout<<"ERROR: threebody decay channel set up with too many parameters."<<std::endl; 
+	}
 }
 
 int threebody::decayfunction(initial_sterile nuS)
@@ -243,9 +248,12 @@ return 0;
 
 //This is the nu_s \to \nu Zprime \to \nu e+ e- channel (on-shell Zprime).
 
-Zprimeresonance::Zprimeresonance(gsl_rng *g, double mZ) : twoIP_channel(g)
+Zprimeresonance::Zprimeresonance(gsl_rng *g, std::vector<double> input) : twoIP_channel(g, input)
 {
-	model_params.push_back(mZ);
+	if(model_params.size() != 1)
+	{
+	 	std::cout<<"ERROR: Zprime resonance channel set up with too many parameters."<<std::endl;
+	}
 }
 
 int Zprimeresonance::decayfunction(initial_sterile nuS)

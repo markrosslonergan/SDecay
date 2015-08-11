@@ -28,7 +28,7 @@ typedef struct OBSERVABLES {
 class twoIP_channel { //This is the mother class for all decay channels (into two Ionising Particles)
 
 public:
-	twoIP_channel(gsl_rng * g);
+	twoIP_channel(gsl_rng * g, std::vector<double> input);
 
 	fourmomentum IP1;	//first outgoing particle 4 momentum.
 	fourmomentum IP2;	//second outgoing particle 4 momentum.
@@ -51,7 +51,7 @@ public:
 class threebody : public twoIP_channel {
 
 public:
-	threebody(gsl_rng * g, double mass);
+	threebody(gsl_rng * g, std::vector<double> input);
 	int decayfunction(initial_sterile nuS);
 
 	struct PDF_CHOICE { 
@@ -73,7 +73,7 @@ private:
 class Zprimeresonance : public twoIP_channel {
 
 public: 
-	Zprimeresonance(gsl_rng * g, double mass);
+	Zprimeresonance(gsl_rng * g, std::vector<double> input);
 	int decayfunction(initial_sterile nuS);
 
 }; 

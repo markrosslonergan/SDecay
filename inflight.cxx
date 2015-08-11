@@ -46,7 +46,7 @@ model_params.push_back(mZprime);
 double phiS = 0.0;
 
 
-threebody CHAN(r, mZprime);
+threebody CHAN(r, model_params);
 
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
@@ -76,7 +76,11 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 //	threebody_decayfunction(r, &Obs, nus, model_params); 
 	CHAN.decayfunction(nus);
 	CHAN.observables(&Obs);
-	Obs.E_sterile = nus.energy;
+
+	// The following sterile observables can't be assigned at the channel
+	// level anymore... in some sense they are inputs not properties of the
+	// outgoing event. We could change this if we want.
+	Obs.E_sterile = nus.energy; 	
 	Obs.Th_sterile = nus.costhS;
 
 	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
