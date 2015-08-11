@@ -12,10 +12,7 @@
 #include "sterile_flux.h" // Defines getEvents, and describes a class whose objects denote a single 
 			  // incoming sterile (mass, fourmomentum).
 
-#include "decay.h" 	// include functions for turning sterile event objects into
-			// observables. Also, defines the structs used to store the variables we care
-			// about. I intend this to become a class; and each channel can then become a 
-			// derived class.
+#include "channel.h"
 
 #define NUMEVENTS 200000
 
@@ -43,6 +40,12 @@ model_params.push_back(mZprime);
 
 double phiS = 0.0;
 
+//
+// this is where we create an object for the channel that we want to use.
+//
+//threebody CHAN(r, model_params);
+Zprimeresonance CHAN(r, model_params);
+
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
 int m; for(m=0;m<=NUMEVENTS-1;m++) 
@@ -59,16 +62,15 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	//array.
 	initial_sterile nus(mS, events[m][0], events[m][1], phiS);
 
-	//Here's the paradigm: decay_function(the allocated RNG, pointer to the
-	//observables desired, initial sterile, other model parameters e.g.
-	//mZprime); 
-	//
-	// decayfunction(r, &Obs, nus, model_params); 
-	//
-	// At the moment, you comment out the one you don't want below:
-	//
-	resonantZprime_decayfunction(r, &Obs, nus, model_params); 
-//	threebody_decayfunction(r, &Obs, nus, model_params); 
+	//We call the appropriate functions from the channels.
+	CHAN.decayfunction(nus);
+	CHAN.observables(&Obs);
+
+	// The following sterile observables can't be assigned at the channel
+	// level anymore... in some sense they are inputs not properties of the
+	// outgoing event. We could change this if we want.
+	Obs.E_sterile = nus.energy; 	
+	Obs.Th_sterile = nus.costhS;
 
 	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
 }
