@@ -76,6 +76,10 @@ public:
 	Zprimeresonance(gsl_rng * g, std::vector<double> input);
 	int decayfunction(initial_sterile nuS);
 
+private:
+	double fourvec_costheta(double FOURVEC[4]);
+	double fourvec_cosphi(double FOURVEC[4]);
+	double rot_boost(double costh, double phi, double gam, double FOURVEC[4]);	
 }; 
 
 #endif
