@@ -12,7 +12,8 @@
 #include "sterile_flux.h" // Defines getEvents, and describes a class whose objects denote a single 
 			  // incoming sterile (mass, fourmomentum).
 
-#include "channel.h"
+#include "channel.h"	  // Includes the mother class for two body final state
+			  // decays, and the derived classes for the two channels we've studied so far.
 
 #define NUMEVENTS 200000
 
@@ -35,7 +36,7 @@ r = gsl_rng_alloc (T);
 
 static OBSERVABLES Obs; //This struct is contained in "decay.h"; it specifically gives variables for a two body event (e+,e-)
 
-std::vector<double> model_params; //These are the theoretical parameters which the model needs to know.
+std::vector<double> model_params; //This should include any theoretical parameters which the model needs to know.
 model_params.push_back(mZprime);
 
 double phiS = 0.0;
@@ -51,7 +52,7 @@ Zprimeresonance CHAN(r, model_params);
 int m; for(m=0;m<=NUMEVENTS-1;m++) 
 {
 
-	//The data files I have doesn't provide phi angles to the steriles, so
+	//The data files I have don't provide phi angles for the steriles, so
 	//we generate them here. However, I think we want to add the phi to the
 	//sterile data. 
 	phiS = 2.0*M_PI*gsl_rng_uniform(r);
@@ -68,7 +69,7 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 
 	// The following sterile observables can't be assigned at the channel
 	// level anymore... in some sense they are inputs not properties of the
-	// outgoing event. We could change this if we want.
+	// outgoing event, so I'm not sure I think this is a problem.
 	Obs.E_sterile = nus.energy; 	
 	Obs.Th_sterile = nus.costhS;
 

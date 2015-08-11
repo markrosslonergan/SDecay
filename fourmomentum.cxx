@@ -16,7 +16,7 @@ fourmomentum::fourmomentum(double energy, std::vector<double> momentum)
 	populate(energy, momentum);
 }
 
-//This function allows the declaration of empty fourmometa to be filled by .populate(...) later. USE WITH CARE!
+//This function allows the declaration of empty fourmometa to be filled by .populate(...) later. USE WITH CARE! Most of the functions would error with such a vector. 
 fourmomentum::fourmomentum()
 {
 	E = 0.0;

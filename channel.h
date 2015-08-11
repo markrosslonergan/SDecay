@@ -12,7 +12,7 @@
 #include "fourmomentum.h" // defines class fourmomentum
 #include "sterile_flux.h" // defines class initial_sterile
 
-typedef struct OBSERVABLES { 
+typedef struct OBSERVABLES { // this is a struct of relevant observables for two (visible) body final states
 	double E_sum; 	
 	double Th_sum; 
 	double AngSep; 
@@ -39,15 +39,18 @@ public:
 	int observables(OBSERVABLES * output);
 };
 
-
 /* ###############################
    
    Below here we have a derived class for each channel
 
    ############################### */
 
+/* ########################################################################
 
-//This is the nu_s \to \nu e+ e- channel (off-shell Zprime).
+	This is the nu_s \to \nu e+ e- channel (off-shell Zprime).
+
+   ######################################################################## */
+
 class threebody : public twoIP_channel {
 
 public:
@@ -69,7 +72,13 @@ private:
 	int drawRestFrameDist(gsl_rng * r, double mS, double mZprime, double output[3]);
 }; 
 
-//This is the nu_s \to \nu Zprime \to \nu e+ e- channel (on-shell Zprime).
+
+/* ########################################################################
+
+	This is the nu_s \to \nu Zprime \to \nu e+ e- channel (on-shell Zprime).
+
+   ######################################################################## */
+
 class Zprimeresonance : public twoIP_channel {
 
 public: 
