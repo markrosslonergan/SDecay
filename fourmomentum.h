@@ -26,6 +26,7 @@ public:
 	int populate(double energy, std::vector<double> momentum);
 	int print(std::string name);
 	std::vector<double> direction();
+	double gamma();
 };
 
 

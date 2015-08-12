@@ -75,4 +75,18 @@ std::vector<double> fourmomentum::direction()
 return temp;	
 }
 
+double fourmomentum::gamma()
+{
+double temp;
+	if(mass==0)
+	{ 
+		std::cout<<"ERROR: Trying to compute gamma factor for NULL four momentum."<<std::endl; 
+		temp = 1e-5;
+	}	
+	else
+	{
+		temp = E/mass;
+	}
 
+return temp;
+}

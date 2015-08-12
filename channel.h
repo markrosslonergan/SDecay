@@ -91,4 +91,22 @@ private:
 	double rot_boost(double costh, double phi, double gam, double FOURVEC[4]);	
 }; 
 
+/* ########################################################################
+
+	This is for a generic two body with a two (massive)  particle final state.
+
+   ######################################################################## */
+
+class twobody : public twoIP_channel {
+
+public: 
+	twobody(gsl_rng * g, std::vector<double> input);
+	int decayfunction(initial_sterile nuS);
+
+private:
+	int rot_boost_from_parent(fourmomentum * parent, fourmomentum * thing_to_be_rot_boosted);
+}; 
+
+
+
 #endif

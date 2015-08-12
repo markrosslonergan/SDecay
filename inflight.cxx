@@ -37,15 +37,22 @@ r = gsl_rng_alloc (T);
 static OBSERVABLES Obs; //This struct is contained in "decay.h"; it specifically gives variables for a two body event (e+,e-)
 
 std::vector<double> model_params; //This should include any theoretical parameters which the model needs to know.
-model_params.push_back(mZprime);
 
 double phiS = 0.0;
 
 //
 // this is where we create an object for the channel that we want to use.
 //
+
+//model_params.push_back(mZprime);
 //threebody CHAN(r, model_params);
-Zprimeresonance CHAN(r, model_params);
+
+//model_params.push_back(mZprime);
+//Zprimeresonance CHAN(r, model_params);
+
+model_params.push_back(0.005); //set one decay product massless.
+model_params.push_back(0.010); //set one massive.
+twobody CHAN(r, model_params);
 
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
