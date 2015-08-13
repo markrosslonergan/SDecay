@@ -384,8 +384,6 @@ double temp = 0.0;
 return 0;
 }
 
-
-
 //This is a generic nu_s \to two body channel (isotropic in rest-frame decay)
 
 twobody::twobody(gsl_rng * r, std::vector<double> input) : twoIP_channel(r, input)

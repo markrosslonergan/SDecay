@@ -95,6 +95,16 @@ private:
 
 	This is for a generic two body with a two (massive)  particle final state.
 
+	This might be confusing... but when initialized you pass it two masses
+	(ma and mb, in order).  The OBSERVABLES struct which is populated is then the
+	same as used for the eplus and eminus channel (defined at the top) -- but with
+	E_high, costheta_high refering to the first particle (mass ma) and E_low ,
+	costheta_low referring to the second particle (mass mb). It seems silly to
+	actually order these different particles.
+
+	Of course, we could come up with a more general OBSERVABLES function to
+	make this a bit more logical.
+
    ######################################################################## */
 
 class twobody : public twoIP_channel {
