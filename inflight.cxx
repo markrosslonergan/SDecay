@@ -15,6 +15,8 @@
 #include "channel.h"	  // Includes the mother class for two body final state
 			  // decays, and the derived classes for the two channels we've studied so far.
 
+#include "plot.h"	  // This includes functions to make 2D histograms.
+
 #define NUMEVENTS 200000
 
 /* ########## Main function ############### */
@@ -54,11 +56,19 @@ threebody CHAN(r, model_params);
 //model_params.push_back(0.010); //set one massive.
 //twobody CHAN(r, model_params);
 
+
+//We can also make a histogram suitable for gnuplot.  The two arguments are the
+//binwidths in the x and y variables (in this case Esum and the foreshortened
+//angular separation).
+histogram2D HIST_ESUM_FSANGSEP(0.05,5.0);
+
+//and one for the total desposited energy against the high/low energy ratio.
+histogram2D HIST_ESUM_EHIGHLOWRATIO(0.05,0.01);
+
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
 int m; for(m=0;m<=NUMEVENTS-1;m++) 
 {
-
 	//The data files I have don't provide phi angles for the steriles, so
 	//we generate them here. However, I think we want to add the phi to the
 	//sterile data. 
@@ -75,13 +85,19 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	CHAN.observables(&Obs);
 
 	// The following sterile observables can't be assigned at the channel
-	// level anymore... in some sense they are inputs not properties of the
+	// level anymore... in some sense they are inputs, not properties of the
 	// outgoing event, so I'm not sure I think this is a problem.
 	Obs.E_sterile = nus.energy; 	
 	Obs.Th_sterile = nus.costhS;
 
 	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
+	
+	HIST_ESUM_FSANGSEP.add_to_histogram(Obs.E_sum,Obs.FS_AngSep);
+	HIST_ESUM_EHIGHLOWRATIO.add_to_histogram(Obs.E_sum,Obs.E_low/Obs.E_high);
 }
+
+	HIST_ESUM_FSANGSEP.print("data/Esum_FSangularsep.dat");
+	HIST_ESUM_EHIGHLOWRATIO.print("data/Esum_EnergyRatio.dat");
 
 gsl_rng_free(r);
 
