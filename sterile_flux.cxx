@@ -6,13 +6,13 @@ initial_sterile::initial_sterile(double M, double E, double in_costhS, double in
 	energy = E;
 	costhS = in_costhS; 
 	phiS = in_phiS;
-	
-	double temp[] = {sqrt(energy*energy-M*M)*sqrt(1-in_costhS*in_costhS)*cos(in_phiS), sqrt(energy*energy-M*M)*sqrt(1-in_costhS*in_costhS)*sin(in_phiS), sqrt(energy*energy-M*M)*in_costhS };
+	double totP =sqrt(energy*energy-M*M);	
+
+	double temp[] = {totP*sqrt(1.0-in_costhS*in_costhS)*cos(in_phiS), totP*sqrt(1.0-in_costhS*in_costhS)*sin(in_phiS), totP*in_costhS };
 
 	std::vector<double> momentum(temp, temp + sizeof(temp)/sizeof(double));
 
 	labframeP.populate(energy, momentum);
-	
 }
 
 double getEvents(double mS, double mZprime, double events[][2])

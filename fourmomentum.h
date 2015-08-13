@@ -27,6 +27,7 @@ public:
 	int print(std::string name);
 	std::vector<double> direction();
 	double gamma();
+	int rot_boost_from_parent(fourmomentum * parentP);
 };
 
 

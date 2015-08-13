@@ -90,3 +90,34 @@ double temp;
 
 return temp;
 }
+
+int fourmomentum::rot_boost_from_parent(fourmomentum * parentP)
+{
+	double costheta = cos(parentP->direction().at(0));
+	double sintheta = sin(parentP->direction().at(0));
+	double phi = parentP->direction().at(1);
+
+	double gamma = parentP->gamma();
+	double beta = sqrt(1.0-1.0/(gamma*gamma));
+
+	double temp[4];
+	temp[0]=E;
+	temp[1]=p.at(0);
+	temp[2]=p.at(1);
+	temp[3]=p.at(2);
+
+	double new_E;
+	std::vector<double> new_p;
+
+	new_E = gamma*temp[0] + gamma*beta*temp[3];
+	new_p.push_back( gamma*beta*cos(phi)*sintheta*temp[0] + cos(phi)*costheta*temp[1] - sin(phi)*temp[2] + gamma*cos(phi)*sintheta*temp[3] );
+	new_p.push_back( gamma*beta*sin(phi)*sintheta*temp[0] + sin(phi)*costheta*temp[1] + cos(phi)*temp[2] + gamma*sin(phi)*sintheta*temp[3] );
+	new_p.push_back( gamma*beta*costheta*temp[0] - sintheta*temp[1] + gamma*costheta*temp[3] );
+
+	fourmomentum::populate(new_E, new_p);
+
+return 0;
+}
+
+
+

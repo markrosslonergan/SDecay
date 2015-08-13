@@ -103,8 +103,6 @@ public:
 	twobody(gsl_rng * g, std::vector<double> input);
 	int decayfunction(initial_sterile nuS);
 
-private:
-	int rot_boost_from_parent(fourmomentum * parent, fourmomentum * thing_to_be_rot_boosted);
 }; 
 
 

@@ -427,6 +427,7 @@ int twobody::decayfunction(initial_sterile nus)
 	momentum_b_rf.push_back(-P_rf*sintheta_rf*sin(phi_rf));
 	momentum_b_rf.push_back(-P_rf*costheta_rf);
 
+	//Set up the decay product four momenta in the sterile rest frame.
 	IP1.populate(Ea_rf, momentum_a_rf);
 	IP2.populate(Eb_rf, momentum_b_rf);
 
@@ -434,44 +435,12 @@ int twobody::decayfunction(initial_sterile nus)
 //	IP2.print("pre-rot IP2");
 
 	//We now need to boost and rotate so that the z axis lies along the sterile direction at an appropriate boost.
-	twobody::rot_boost_from_parent(&nus.labframeP, &IP1); 	
-	twobody::rot_boost_from_parent(&nus.labframeP, &IP2); 	
+	IP1.rot_boost_from_parent(&nus.labframeP); 	
+	IP2.rot_boost_from_parent(&nus.labframeP); 	
 
 //	IP1.print("post-rot IP1");
 //	IP2.print("post-rot IP2");
 
 return 0;
 }
-
-
-int twobody::rot_boost_from_parent(fourmomentum * parentP, fourmomentum * P)
-{
-	double costheta = cos(parentP->direction().at(0));
-	double sintheta = sin(parentP->direction().at(0));
-	double phi = parentP->direction().at(1);
-
-	double gamma = parentP->gamma();
-	double beta = sqrt(1.0-1.0/(gamma*gamma));
-
-	double temp[4];
-	temp[0]=P->E;
-	temp[1]=P->p.at(0);
-	temp[2]=P->p.at(1);
-	temp[3]=P->p.at(2);
-
-	double new_E;
-	std::vector<double> new_p;
-
-	new_E = gamma*temp[0] + gamma*beta*temp[3];
-	new_p.push_back( gamma*beta*cos(phi)*sintheta*temp[0] + cos(phi)*costheta*temp[1] - sin(phi)*temp[2] + gamma*cos(phi)*sintheta*temp[3] );
-	new_p.push_back( gamma*beta*sin(phi)*sintheta*temp[0] + sin(phi)*costheta*temp[1] + cos(phi)*temp[2] + gamma*sin(phi)*sintheta*temp[3] );
-	new_p.push_back( gamma*beta*costheta*temp[0] - sintheta*temp[1] + gamma*costheta*temp[3] );
-
-	P->populate(new_E, new_p);
-
-return 0;
-}
-
-
-
 
