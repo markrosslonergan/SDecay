@@ -44,15 +44,15 @@ double phiS = 0.0;
 // this is where we create an object for the channel that we want to use.
 //
 
-//model_params.push_back(mZprime);
-//threebody CHAN(r, model_params);
+model_params.push_back(mZprime);
+threebody CHAN(r, model_params);
 
 //model_params.push_back(mZprime);
 //Zprimeresonance CHAN(r, model_params);
 
-model_params.push_back(0.005); //set one decay product massless.
-model_params.push_back(0.010); //set one massive.
-twobody CHAN(r, model_params);
+//model_params.push_back(0.005); //set one decay product massless.
+//model_params.push_back(0.010); //set one massive.
+//twobody CHAN(r, model_params);
 
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
