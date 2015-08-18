@@ -35,14 +35,32 @@ int twoIP_channel::observables(OBSERVABLES * output)
 //	IP1.print("IP1");
 //	IP2.print("IP2");
 
-	if(IP1.p.at(2) > 0 && IP2.p.at(2) > 0)
+//	if(IP1.p.at(2) > 0 && IP2.p.at(2) > 0)
+//	{
+//		output->FS_AngSep = (180.0/M_PI)*fabs(atan(IP1.p.at(0)/IP1.p.at(2)) - atan(IP2.p.at(0)/IP2.p.at(2)));
+//	}
+//	else 
+//	{
+//		output->FS_AngSep = 180 - (180.0/M_PI)*fabs(atan(IP1.p.at(0)/IP1.p.at(2)) - atan(IP2.p.at(0)/IP2.p.at(2)));
+//	}
+
+	if(IP1.p.at(2)*IP2.p.at(2) >= 0 && IP2.p.at(0)*IP2.p.at(0) >= 0)
 	{
-		output->FS_AngSep = (180.0/M_PI)*fabs(atan(IP1.p.at(0)/IP1.p.at(2)) - atan(IP2.p.at(0)/IP2.p.at(2)));
+		output->FS_AngSep = (180.0/M_PI)*fabs(fabs(atan(IP1.p.at(0)/IP1.p.at(2))) - fabs(atan(IP2.p.at(0)/IP2.p.at(2))));
 	}
-	else 
+	else if(IP1.p.at(2)*IP2.p.at(2) >= 0 && IP2.p.at(0)*IP2.p.at(0) < 0)
 	{
-		output->FS_AngSep = 180 - (180.0/M_PI)*fabs(atan(IP1.p.at(0)/IP1.p.at(2)) - atan(IP2.p.at(0)/IP2.p.at(2)));
+		output->FS_AngSep = (180.0/M_PI)*fabs(atan(IP1.p.at(0)/IP1.p.at(2)) + atan(IP2.p.at(0)/IP2.p.at(2)));
 	}
+	else if(IP1.p.at(2)*IP2.p.at(2) < 0 && IP2.p.at(0)*IP2.p.at(0) >= 0)
+	{
+		output->FS_AngSep = 180.0- (180.0/M_PI)*fabs(atan(IP1.p.at(0)/IP1.p.at(2)) + atan(IP2.p.at(0)/IP2.p.at(2)));
+	}
+	else if(IP1.p.at(2)*IP2.p.at(2) < 0 && IP2.p.at(0)*IP2.p.at(0) < 0)
+	{
+		output->FS_AngSep = 180.0- (180.0/M_PI)*fabs(atan(IP1.p.at(0)/IP1.p.at(2)) - atan(IP2.p.at(0)/IP2.p.at(2)));
+	}
+
 
 	output->E_high = IP1.E;	
 	output->Th_high = (180.0/M_PI)*IP1.direction().at(0);	
