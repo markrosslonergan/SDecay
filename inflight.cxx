@@ -65,6 +65,8 @@ histogram2D HIST_ESUM_FSANGSEP(0.05,5.0);
 //and one for the total desposited energy against the high/low energy ratio.
 histogram2D HIST_ESUM_EHIGHLOWRATIO(0.05,0.01);
 
+histogram2D HIST_ANGSEP_FSANGSEP(5.0,5.0);
+
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
 int m; for(m=0;m<=NUMEVENTS-1;m++) 
@@ -94,10 +96,12 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	
 	HIST_ESUM_FSANGSEP.add_to_histogram(Obs.E_sum,Obs.FS_AngSep);
 	HIST_ESUM_EHIGHLOWRATIO.add_to_histogram(Obs.E_sum,Obs.E_low/Obs.E_high);
+	HIST_ANGSEP_FSANGSEP.add_to_histogram(Obs.AngSep,Obs.FS_AngSep);
 }
 
 	HIST_ESUM_FSANGSEP.print("data/Esum_FSangularsep.dat");
 	HIST_ESUM_EHIGHLOWRATIO.print("data/Esum_EnergyRatio.dat");
+	HIST_ANGSEP_FSANGSEP.print("data/Angularsep_FSangularsep.dat");
 
 gsl_rng_free(r);
 

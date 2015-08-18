@@ -61,8 +61,8 @@ int twoIP_channel::observables(OBSERVABLES * output)
 		output->Th_high = temp;
 	}
 
-//	IP1.print("IP1");
-//	IP2.print("IP2");
+	IP1.print("IP1");
+	IP2.print("IP2");
 
 return 0;
 }
