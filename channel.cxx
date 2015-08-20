@@ -15,6 +15,12 @@ twoIP_channel::twoIP_channel(gsl_rng * g, std::vector<double> input_params)
 	r = g;
 }
 
+int twoIP_channel::decayfunction(initial_sterile nuS)
+{
+	std::cout<<"You've somehow managed to call the decayfunction of the parent class (twoIP_channel). Don't do that."<<std::endl;
+return 0;
+}
+
 int twoIP_channel::observables(OBSERVABLES * output)
 {
 	//OBSERVABLES { double E_sum; double Th_sum; double AngSep; double E_sterile; double Th_sterile; double E_high; double Th_high; double E_low; double Th_low; double FS_AngSep; } OBSERVABLES;

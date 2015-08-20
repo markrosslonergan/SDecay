@@ -68,8 +68,27 @@ std::vector<double> fourmomentum::direction()
 		temp.push_back(0.0);
 	}
 	else{
-		temp.push_back(acos(p.at(2)/modp));
-		temp.push_back(atan(p.at(1)/p.at(0)));
+		temp.push_back(acos(p.at(2)/modp)); //acos returns 0 to pi.
+		double phi = fabs(atan(p.at(1)/p.at(0)));
+
+		if(p.at(0)>=0.0 && p.at(1) >= 0.0)
+		{
+			temp.push_back(phi);
+		}
+		else if(p.at(0)>=0.0 && p.at(1) < 0.0)
+		{
+			temp.push_back(-phi);
+		}
+		else if(p.at(0)<0.0 && p.at(1) >= 0.0)
+		{
+			temp.push_back(M_PI-phi);
+		}
+		else if(p.at(0)<0.0 && p.at(1) < 0.0)
+		{
+			temp.push_back(-M_PI+phi);
+		}
+		
+
 	}
 
 return temp;	

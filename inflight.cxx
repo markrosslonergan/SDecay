@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <unistd.h>
 
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_rng.h>
@@ -23,12 +24,6 @@
 int main(int argc, char* argv[])
 {
 
-double mS = strtof(argv[1],NULL);
-double mZprime = strtof(argv[2],NULL); 
-
-static double events[NUMEVENTS][2]; //define the storage for all the events, [0] = E_s, [1] = cos\theta_s
-getEvents(mS,mZprime,events); 
-
 const gsl_rng_type * T; // Standard invocation prayer to the RNG
 gsl_rng * r;
 gsl_rng_env_setup();
@@ -36,40 +31,94 @@ gsl_rng_env_setup();
 T = gsl_rng_default;
 r = gsl_rng_alloc (T);
 
-static OBSERVABLES Obs; //This struct is contained in "decay.h"; it specifically gives variables for a two body event (e+,e-)
+double mS = 0.0530; 
+double mZprime = 0.3600;
+int channel_flag = 0;
 
-std::vector<double> model_params; //This should include any theoretical parameters which the model needs to know.
+int c;
+opterr = 0;
 
-double phiS = 0.0;
-
+while ((c = getopt(argc, argv, "m:Z:C:")) != -1)
+{
+switch(c)
+{
 //
 // this is where we create an object for the channel that we want to use.
 //
+case 'm':
+	mS = strtof(optarg,NULL);
+	break;
+case 'Z':
+	mZprime = strtof(optarg,NULL);
+	break;
+case 'C':
+	channel_flag = strtod(optarg,NULL);
+	break;
 
-model_params.push_back(mZprime);
-threebody CHAN(r, model_params);
+case '?':
+//	std::cout<<"Abandon hope all ye who enter this value. "<<std::endl;
+	std::cout<<"Allowed arguments:"<<std::endl;
+	std::cout<<"\t-m\tsets the sterile mass."<<std::endl;
+	std::cout<<"\t-Z\tsets the Zprime mass."<<std::endl;
+	std::cout<<"\t-C\tsets the decay channel (0 normal threebody, 1 resonant threebody, 2 generic two body."<<std::endl;
+	return 0;
+default:
+	std::cout<<"I don't know how you got here."<<std::endl;
+	return 0;
+}}
 
-//model_params.push_back(mZprime);
-//Zprimeresonance CHAN(r, model_params);
 
-//model_params.push_back(0.005); //set one decay product massless.
-//model_params.push_back(0.010); //set one massive.
-//twobody CHAN(r, model_params);
+
+static double events[NUMEVENTS][2]; //define the storage for all the events, [0] = E_s, [1] = cos\theta_s
+getEvents(mS,mZprime,events); 
+
+
+//Now we set up the decay channel object.
+std::vector<double> model_params; //This should include any theoretical parameters which the model needs to know.
+
+twoIP_channel *CHAN;
+
+if(channel_flag == 1)
+{
+//	std::cout<<"Resonant threebody."<<std::endl;
+
+	model_params.push_back(mZprime);
+	CHAN = new Zprimeresonance(r,model_params); 
+}
+else if(channel_flag==2)
+{
+//	std::cout<<"Twobody."<<std::endl;
+
+	model_params.push_back(0.005); //set one decay product massless.
+	model_params.push_back(0.010); //set one massive.
+	CHAN = new twobody(r,model_params); 
+}
+else
+{
+//	std::cout<<"Threebody."<<std::endl;
+
+	model_params.push_back(mZprime);
+	CHAN = new threebody(r,model_params); 
+}
 
 
 //We can also make a histogram suitable for gnuplot.  The two arguments are the
 //binwidths in the x and y variables (in this case Esum and the foreshortened
 //angular separation).
-histogram2D HIST_ESUM_FSANGSEP(0.05,5.0);
+histogram2D HIST_ESUM_FSANGSEP(0.01,1.0);
 
 //and one for the total desposited energy against the high/low energy ratio.
-histogram2D HIST_ESUM_EHIGHLOWRATIO(0.05,0.01);
+histogram2D HIST_ESUM_EHIGHLOWRATIO(0.01,0.01);
 
 //For angular separation against foreshortened angular separation.
-histogram2D HIST_ANGSEP_FSANGSEP(5.0,5.0);
+histogram2D HIST_ANGSEP_FSANGSEP(1.0,1.0);
+
+
 
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
+double phiS = 0.0;
+static OBSERVABLES Obs; //This struct is contained in "decay.h"; it specifically gives variables for a two body event (e+,e-)
 int m; for(m=0;m<=NUMEVENTS-1;m++) 
 {
 	//The data files I have don't provide phi angles for the steriles, so
@@ -84,8 +133,8 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	initial_sterile nus(mS, events[m][0], events[m][1], phiS);
 
 	//We call the appropriate functions from the channels.
-	CHAN.decayfunction(nus);
-	CHAN.observables(&Obs);
+	CHAN->decayfunction(nus);
+	CHAN->observables(&Obs);
 
 	// The following sterile observables can't be assigned at the channel
 	// level anymore... in some sense they are inputs, not properties of the
@@ -105,6 +154,7 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	HIST_ANGSEP_FSANGSEP.print("data/Angularsep_FSangularsep.dat");
 
 gsl_rng_free(r);
+delete CHAN;
 
 return 0;
 }

@@ -37,6 +37,7 @@ public:
 	std::vector<double> model_params;
 
 	int observables(OBSERVABLES * output);
+	virtual int decayfunction(initial_sterile nuS);	
 };
 
 /* ###############################
