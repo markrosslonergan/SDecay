@@ -65,6 +65,7 @@ histogram2D HIST_ESUM_FSANGSEP(0.05,5.0);
 //and one for the total desposited energy against the high/low energy ratio.
 histogram2D HIST_ESUM_EHIGHLOWRATIO(0.05,0.01);
 
+//For angular separation against foreshortened angular separation.
 histogram2D HIST_ANGSEP_FSANGSEP(5.0,5.0);
 
 //We enter the main loop over events. For each one, computing the relevant
