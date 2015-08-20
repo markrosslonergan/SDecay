@@ -23,7 +23,7 @@ set xrange [-1:1]
 
 set origin 1,1
 
-plot 'all.dat' u ((floor(cos($2)/0.1) + 0.5)*0.1):(1.0/200000) smooth freq w boxes ls 1 lc 1 lw 2 ti "Average direction", 'all.dat' u ((floor($5/0.1) + 0.5)*0.1):(1.0/200000) smooth freq w p ls 2 lc 3 lw 2 ps 1.5 ti "Initial sterile direction"
+plot 'all.dat' u ((floor(cos($2*3.1415/180.0)/0.1) + 0.5)*0.1):(1.0/200000) smooth freq w boxes ls 1 lc 1 lw 2 ti "Average direction", 'all.dat' u ((floor(cos($5*3.1415/180.0)/0.1) + 0.5)*0.1):(1.0/200000) smooth freq w p ls 2 lc 3 lw 2 ps 1.5 ti "Initial sterile direction"
 
 set size 1,1 
 set xlabel "E (GeV)"
@@ -41,7 +41,7 @@ set xrange [-1:1]
 
 set origin 1,0
 
-plot 'all.dat' u ((floor(cos($7)/0.1) + 0.5)*0.1):(1.0/200000) smooth freq w boxes ls 1 lc 1 lw 2 ti "Highest-energy electron direction", 'all.dat' u ((floor(cos($9)/0.1) + 0.5)*0.1):(1.0/200000) smooth freq w p ls 2 lc 3 lw 2 ps 1.5 ti "Lowest-energy electron direction"
+plot 'all.dat' u ((floor(cos($7*3.1415/180.0)/0.1) + 0.5)*0.1):(1.0/200000) smooth freq w boxes ls 1 lc 1 lw 2 ti "Highest-energy electron direction", 'all.dat' u ((floor(cos($9*3.1415/180.0)/0.1) + 0.5)*0.1):(1.0/200000) smooth freq w p ls 2 lc 3 lw 2 ps 1.5 ti "Lowest-energy electron direction"
 
 #unset multiplot
 
