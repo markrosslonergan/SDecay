@@ -7,5 +7,5 @@ inflight
 
 data
 data/*
-plots
-plots/*
+
+plots/*.pdf
