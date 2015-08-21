@@ -99,7 +99,8 @@ output_file.open(name);
 
 	for(n=0;n<ARRAY.size();n++)
 	{
-		print_array.at(floor(ARRAY.at(n).at(0)/binwidth_x) - floor(low_x/binwidth_x)).at(floor(ARRAY.at(n).at(1)/binwidth_y) - floor(low_y/binwidth_y))+=1.0/(ARRAY.size()*binwidth_x*binwidth_y);
+		//print_array.at(floor(ARRAY.at(n).at(0)/binwidth_x) - floor(low_x/binwidth_x)).at(floor(ARRAY.at(n).at(1)/binwidth_y) - floor(low_y/binwidth_y))+=1.0/(ARRAY.size()*binwidth_x*binwidth_y);
+		print_array.at(floor(ARRAY.at(n).at(0)/binwidth_x) - floor(low_x/binwidth_x)).at(floor(ARRAY.at(n).at(1)/binwidth_y) - floor(low_y/binwidth_y))+=1.0;
 
 	}
 
@@ -108,10 +109,10 @@ output_file.open(name);
 		for(m=0;m<dim_Y;m++)
 		{
 			// use below for gnuplot splot contour file.
-			//output_file<<(n+0.5)*binwidth_x<<" "<<(m+0.5)*binwidth_y<<" "<<print_array.at(n).at(m)<<std::endl;	
+			output_file<<(n+0.5)*binwidth_x<<" "<<(m+0.5)*binwidth_y<<" "<<print_array.at(n).at(m)<<std::endl;	
 	
 			// use below for gnuplot plot "image" file
-			output_file<<print_array.at(n).at(m)<<" ";	
+			//output_file<<print_array.at(n).at(m)<<" ";	
 		}
 		output_file<<std::endl;
 	}

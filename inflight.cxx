@@ -18,6 +18,8 @@
 
 #include "plot.h"	  // This includes functions to make 2D histograms.
 
+#include "detector.h"	  // This includes the detector-specific cut functions.
+
 #define NUMEVENTS 200000
 
 /* ########## Main function ############### */
@@ -31,9 +33,9 @@ gsl_rng_env_setup();
 T = gsl_rng_default;
 r = gsl_rng_alloc (T);
 
-double mS = 0.0530; 
-double mZprime = 0.3600;
-int channel_flag = 0;
+double mS = 0.0530; 	 // These are the default values if no command line parameters are defined. 
+double mZprime = 0.3600; // This one too.
+int channel_flag = 0; 	 // This one too.
 
 int c;
 opterr = 0;
@@ -58,9 +60,9 @@ case 'C':
 case '?':
 //	std::cout<<"Abandon hope all ye who enter this value. "<<std::endl;
 	std::cout<<"Allowed arguments:"<<std::endl;
-	std::cout<<"\t-m\tsets the sterile mass."<<std::endl;
-	std::cout<<"\t-Z\tsets the Zprime mass."<<std::endl;
-	std::cout<<"\t-C\tsets the decay channel (0 normal threebody, 1 resonant threebody, 2 generic two body."<<std::endl;
+	std::cout<<"\t-m\tsets the sterile mass. [default = 0.0530]"<<std::endl;
+	std::cout<<"\t-Z\tsets the Zprime mass. [default = 0.3600]"<<std::endl;
+	std::cout<<"\t-C\tsets the decay channel (0 normal threebody, 1 resonant threebody, 2 generic two body). [default = 0]"<<std::endl;
 	return 0;
 default:
 	std::cout<<"I don't know how you got here."<<std::endl;
@@ -115,6 +117,13 @@ histogram2D HIST_ANGSEP_FSANGSEP(1.0,1.0);
 
 
 
+//We define the detector cuts we would like to use. 
+//
+nocuts DETECTOR; 	// this is a pseudo-detector that just allows every event.
+//muBooNE DETECTOR; 	// this is microboone.
+
+
+
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
 double phiS = 0.0;
@@ -142,11 +151,15 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	Obs.E_sterile = nus.energy; 	
 	Obs.Th_sterile = nus.costhS;
 
-	printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
+	if(DETECTOR.accept(&Obs)==ACCEPTED)
+	{
+		printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
 	
-	HIST_ESUM_FSANGSEP.add_to_histogram(Obs.E_sum,Obs.FS_AngSep);
-	HIST_ESUM_EHIGHLOWRATIO.add_to_histogram(Obs.E_sum,Obs.E_low/Obs.E_high);
-	HIST_ANGSEP_FSANGSEP.add_to_histogram(Obs.AngSep,Obs.FS_AngSep);
+		HIST_ESUM_FSANGSEP.add_to_histogram(Obs.E_sum,Obs.FS_AngSep);
+		HIST_ESUM_EHIGHLOWRATIO.add_to_histogram(Obs.E_sum,Obs.E_low/Obs.E_high);
+		HIST_ANGSEP_FSANGSEP.add_to_histogram(Obs.AngSep,Obs.FS_AngSep);
+	}
+	
 }
 
 	HIST_ESUM_FSANGSEP.print("data/Esum_FSangularsep.dat");

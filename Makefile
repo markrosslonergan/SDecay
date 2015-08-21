@@ -4,6 +4,7 @@ d1:	inflight.cxx sterile_flux.h sterile_flux.cxx fourmomentum.h fourmomentum.cxx
 	g++ -g -std=c++11 -c sterile_flux.cxx -o sterile_flux.o -I.
 	g++ -g -std=c++11 -c channel.cxx -o channel.o -I.
 	g++ -g -std=c++11 -c plot.cxx -o plot.o -I.
-	g++ -g -std=c++11 -o inflight inflight.o plot.o fourmomentum.o sterile_flux.o channel.o -lgomp -lnlopt -lgsl -lgslcblas
+	g++ -g -std=c++11 -c detector.cxx -o detector.o -I.
+	g++ -g -std=c++11 -o inflight inflight.o plot.o detector.o fourmomentum.o sterile_flux.o channel.o -lgomp -lnlopt -lgsl -lgslcblas
 	rm *.o
 
