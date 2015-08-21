@@ -109,7 +109,7 @@ output_file.open(name);
 		for(m=0;m<dim_Y;m++)
 		{
 			// use below for gnuplot splot contour file.
-			output_file<<(n+0.5)*binwidth_x<<" "<<(m+0.5)*binwidth_y<<" "<<print_array.at(n).at(m)<<std::endl;	
+			output_file<<(floor(low_x/binwidth_x)+n+0.5)*binwidth_x<<" "<<(floor(low_y/binwidth_y)+m+0.5)*binwidth_y<<" "<<print_array.at(n).at(m)<<std::endl;	
 	
 			// use below for gnuplot plot "image" file
 			//output_file<<print_array.at(n).at(m)<<" ";	

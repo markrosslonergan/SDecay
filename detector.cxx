@@ -10,7 +10,7 @@ return -1;
 
 muBooNE::muBooNE()
 {
-	Energy_threshold = 0.01; 	// In GeV
+	Energy_threshold = 0.05; 	// In GeV
 	AngSep_threshold = 30.0; 	// In Degrees
 	Energy_ratio_threshold = 0.1; 	// Percentage.
 }
@@ -21,11 +21,11 @@ int muBooNE::accept(OBSERVABLES * Obs)
 	Obs->FS_AngSep < AngSep_threshold ||
 	Obs->E_low/Obs->E_high < Energy_ratio_threshold ) 
     { 
-	return 1; 
+	return REJECTED; 
     }
     else
     {
-	return 0;
+	return ACCEPTED;
     }
 
 }
