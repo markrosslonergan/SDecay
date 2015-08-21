@@ -5,9 +5,10 @@ ZMASS=$2
 
 FOLDER=$SMASS"_"$ZMASS
 
-./inflight $1 $2 > data/all.dat
+mkdir -p data/$FOLDER
 
-mkdir data/$FOLDER
+./inflight -m $SMASS -Z $ZMASS > data/all.dat
+
 mv data/*.dat data/$FOLDER/.
 
 cp plots/parula.pal data/$FOLDER
