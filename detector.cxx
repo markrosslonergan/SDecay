@@ -10,7 +10,7 @@ return -1;
 
 muBooNE::muBooNE()
 {
-	Energy_threshold = 0.05; 	// In GeV
+	Energy_threshold = 0.1; 	// In GeV
 	AngSep_threshold = 30.0; 	// In Degrees
 	Energy_ratio_threshold = 0.1; 	// Percentage.
 }

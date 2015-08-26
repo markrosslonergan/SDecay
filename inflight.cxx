@@ -119,8 +119,8 @@ histogram2D HIST_ANGSEP_FSANGSEP(1.0,1.0);
 
 //We define the detector cuts we would like to use. 
 //
-nocuts DETECTOR; 	// this is a pseudo-detector that just allows every event.
-//muBooNE DETECTOR; 	// this is microboone.
+//nocuts DETECTOR; 	// this is a pseudo-detector that just allows every event.
+muBooNE DETECTOR; 	// this is microboone.
 
 
 
