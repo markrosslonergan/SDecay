@@ -32,4 +32,22 @@ private:
 	std::vector<std::vector<double>> print_array;
 };
 
+class MMHist {
+
+public:
+	MMHist(double b_bins, double b_min, double b_max);
+	int wipe_clean();	
+	int add_to_histogram(double x);
+	int print(double x);
+
+private: 
+	double binwidth;
+	double min;
+	double max;
+	double bins;
+	double events;
+	std::vector<double> histogram;
+};
+
+
 #endif

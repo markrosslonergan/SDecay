@@ -123,3 +123,67 @@ return 0;
 }
 
 
+
+MMHist::MMHist(double b_bins, double b_min, double b_max)
+{
+	events=0.0;
+	min= b_min;
+	max= b_max;
+	bins = b_bins;
+	binwidth = (b_max-b_min)/b_bins;	
+
+	int n;
+	for(n=0; n<bins; n++)
+	{
+		histogram.push_back(0.0);
+	}
+
+}
+
+int MMHist::add_to_histogram(double x)
+{
+	int bin_temp = floor(x/binwidth);
+	if(bin_temp<histogram.size())
+	{
+		histogram.at(bin_temp) += 1.0;
+	}
+
+	events += 1.0;
+
+return 0;
+}
+
+int MMHist::wipe_clean()
+{
+	int N=0;
+	for(N=0;N<histogram.size();N++)
+	{
+		histogram.at(N) = 0.0;
+	}
+
+return 0;
+}
+
+int MMHist::print(double x)
+{
+	int n;
+	if(events==0.0)
+	{
+		for(n=0;n<histogram.size();n++)
+		{
+			//std::cout<<" "<<0.0;
+			std::cout<<x<<" "<<n*binwidth +min<<" "<<0.0<<std::endl;
+		}
+	}
+	else
+	{
+		for(n=0;n<histogram.size();n++)
+		{
+			//std::cout<<" "<<histogram.at(n)/events;
+			std::cout<<x<<" "<<n*binwidth+min<<" "<<histogram.at(n)/events<<std::endl;
+		}
+	}
+	std::cout<<std::endl;
+
+return 0;	
+}

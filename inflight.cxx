@@ -22,6 +22,9 @@
 
 #define NUMEVENTS 200000
 
+int output_distributions(gsl_rng * r, detector * DETECTOR, twoIP_channel * CHAN, double mS, double mZprime);
+int migration_matrix(detector * DETECTOR, twoIP_channel * CHAN, double mS);	
+
 /* ########## Main function ############### */
 int main(int argc, char* argv[])
 {
@@ -36,11 +39,12 @@ r = gsl_rng_alloc (T);
 double mS = 0.0530; 	 // These are the default values if no command line parameters are defined. 
 double mZprime = 0.3600; // This one too.
 int channel_flag = 0; 	 // This one too.
+int matrix_flag = 0; 	 // This one too.
 
 int c;
 opterr = 0;
 
-while ((c = getopt(argc, argv, "m:Z:C:")) != -1)
+while ((c = getopt(argc, argv, "m:Z:C:M:")) != -1)
 {
 switch(c)
 {
@@ -56,23 +60,21 @@ case 'Z':
 case 'C':
 	channel_flag = strtod(optarg,NULL);
 	break;
-
+case 'M':
+	matrix_flag = strtod(optarg,NULL);
+	break;
 case '?':
 //	std::cout<<"Abandon hope all ye who enter this value. "<<std::endl;
 	std::cout<<"Allowed arguments:"<<std::endl;
 	std::cout<<"\t-m\tsets the sterile mass. [default = 0.0530]"<<std::endl;
 	std::cout<<"\t-Z\tsets the Zprime mass. [default = 0.3600]"<<std::endl;
 	std::cout<<"\t-C\tsets the decay channel (0 normal threebody, 1 resonant threebody, 2 generic two body). [default = 0]"<<std::endl;
+	std::cout<<"\t-M n\tproduces a migration matrix for oberservable 'n'"<<std::endl;
 	return 0;
 default:
 	std::cout<<"I don't know how you got here."<<std::endl;
 	return 0;
 }}
-
-
-
-static double events[NUMEVENTS][2]; //define the storage for all the events, [0] = E_s, [1] = cos\theta_s
-getEvents(mS,mZprime,events); 
 
 
 //Now we set up the decay channel object.
@@ -103,6 +105,87 @@ else
 	CHAN = new threebody(r,model_params); 
 }
 
+//We define the detector cuts we would like to use. 
+//
+detector * DETECTOR;
+
+DETECTOR = new nocuts(); 	// this is a pseudo-detector that just allows every event.
+//DETECTOR = new muBooNE(); 	// this is microboone.
+
+
+if(matrix_flag == 0)
+{
+	//This is the meat of the old program
+	output_distributions(r, DETECTOR, CHAN, mS, mZprime);
+}
+else
+{
+	migration_matrix(DETECTOR, CHAN, mS);	
+}
+
+
+//Cleaning up.
+gsl_rng_free(r);
+delete CHAN;
+
+return 0;
+}
+
+
+int migration_matrix(detector * DETECTOR, twoIP_channel * CHAN, double mS)
+{
+
+//For now we assume that all steriles are on axis. cos=1 phi=0
+double Emin=0.05;
+double Emax=10.0;
+double number_of_bins = 40;
+
+static OBSERVABLES Obs; //This struct is contained in "decay.h"; it specifically gives variables for a two body event (e+,e-)
+
+//These should never get changed and never used, but I thought it safe to fill them with something.
+Obs.Th_sterile = 0.0;
+Obs.E_sterile = 0.0;
+
+int m; 
+int MC_SCALE = 40000;
+
+MMHist EsumHist(100.0,0.0,5.0);
+
+double Es = 1.0;
+for(Es=Emin; Es<Emax+1e-5; Es+=(Emax-Emin)/number_of_bins)
+{
+
+if(Es>mS)
+{
+	initial_sterile nus(mS, Es, 1.0-1e-7, 0.0); //I'm a little wary of putting the steriles exactly on axis... why? Test it?
+
+	EsumHist.wipe_clean();
+
+	for(m=0;m<MC_SCALE;m++)
+	{
+		//We call the appropriate functions from the channels.
+		CHAN->decayfunction(nus);
+		CHAN->observables(&Obs);
+
+		if(DETECTOR->accept(&Obs)==ACCEPTED)
+		{
+			EsumHist.add_to_histogram(Obs.E_sum);
+		}
+	}
+}
+	EsumHist.print(Es); //this prints zeros if no events have been added.
+}	
+
+return 0;
+}
+
+
+
+int output_distributions(gsl_rng * r, detector * DETECTOR, twoIP_channel * CHAN, double mS, double mZprime)
+{
+
+static double events[NUMEVENTS][2]; //define the storage for all the events, [0] = E_s, [1] = cos\theta_s
+getEvents(mS,mZprime,events); 
 
 //We can also make a histogram suitable for gnuplot.  The two arguments are the
 //binwidths in the x and y variables (in this case Esum and the foreshortened
@@ -114,15 +197,6 @@ histogram2D HIST_ESUM_EHIGHLOWRATIO(0.01,0.01);
 
 //For angular separation against foreshortened angular separation.
 histogram2D HIST_ANGSEP_FSANGSEP(1.0,1.0);
-
-
-
-//We define the detector cuts we would like to use. 
-//
-//nocuts DETECTOR; 	// this is a pseudo-detector that just allows every event.
-muBooNE DETECTOR; 	// this is microboone.
-
-
 
 //We enter the main loop over events. For each one, computing the relevant
 //observables.
@@ -151,7 +225,7 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	Obs.E_sterile = nus.energy; 	
 	Obs.Th_sterile = nus.costhS;
 
-	if(DETECTOR.accept(&Obs)==ACCEPTED)
+	if(DETECTOR->accept(&Obs)==ACCEPTED)
 	{
 		printf("%.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf %.5lf\n", Obs.E_sum, Obs.Th_sum, Obs.AngSep, Obs.E_sterile, Obs.Th_sterile, Obs.E_high, Obs.Th_high, Obs.E_low, Obs.Th_low, Obs.FS_AngSep);
 	
@@ -165,9 +239,6 @@ int m; for(m=0;m<=NUMEVENTS-1;m++)
 	HIST_ESUM_FSANGSEP.print("data/Esum_FSangularsep.dat");
 	HIST_ESUM_EHIGHLOWRATIO.print("data/Esum_EnergyRatio.dat");
 	HIST_ANGSEP_FSANGSEP.print("data/Angularsep_FSangularsep.dat");
-
-gsl_rng_free(r);
-delete CHAN;
 
 return 0;
 }
