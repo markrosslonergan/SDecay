@@ -124,13 +124,15 @@ return 0;
 
 
 
-MMHist::MMHist(double b_bins, double b_min, double b_max)
+MMHist::MMHist(double b_bins, double b_min, double b_max,int MC)
 {
 	events=0.0;
 	min= b_min;
 	max= b_max;
 	bins = b_bins;
 	binwidth = (b_max-b_min)/b_bins;	
+
+	total_events=(double)MC;
 
 	int n;
 	for(n=0; n<bins; n++)
@@ -180,7 +182,7 @@ int MMHist::print(double x)
 		for(n=0;n<histogram.size();n++)
 		{
 			//std::cout<<" "<<histogram.at(n)/events;
-			std::cout<<x<<" "<<n*binwidth+min<<" "<<histogram.at(n)/events<<std::endl;
+			std::cout<<x<<" "<<n*binwidth+min<<" "<<histogram.at(n)/total_events<<std::endl;
 		}
 	}
 	std::cout<<std::endl;

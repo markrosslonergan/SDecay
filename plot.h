@@ -35,7 +35,7 @@ private:
 class MMHist {
 
 public:
-	MMHist(double b_bins, double b_min, double b_max);
+	MMHist(double b_bins, double b_min, double b_max, int MC_SCALE);
 	int wipe_clean();	
 	int add_to_histogram(double x);
 	int print(double x);
@@ -46,6 +46,7 @@ private:
 	double max;
 	double bins;
 	double events;
+	double total_events;
 	std::vector<double> histogram;
 };
 
