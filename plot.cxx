@@ -189,3 +189,21 @@ int MMHist::print(double x)
 
 return 0;	
 }
+
+double MMHist::efficiency()
+{
+
+	double temp_eff = 0.0;
+
+	int n;
+	if(events>0.0)
+	{
+		for(n=0;n<histogram.size();n++)
+		{
+			temp_eff += histogram.at(n)/total_events;
+		}
+	}
+
+return temp_eff;	
+}
+

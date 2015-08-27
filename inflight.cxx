@@ -24,6 +24,7 @@
 
 int output_distributions(gsl_rng * r, detector * DETECTOR, twoIP_channel * CHAN, double mS, double mZprime);
 int migration_matrix(detector * DETECTOR, twoIP_channel * CHAN, double mS);	
+int efficiency_matrix(detector * DETECTOR, twoIP_channel * CHAN, double mS);	
 
 /* ########## Main function ############### */
 int main(int argc, char* argv[])
@@ -40,11 +41,12 @@ double mS = 0.0530; 	 // These are the default values if no command line paramet
 double mZprime = 0.3600; // This one too.
 int channel_flag = 0; 	 // This one too.
 int matrix_flag = 0; 	 // This one too.
+int eff_flag = 0;
 
 int c;
 opterr = 0;
 
-while ((c = getopt(argc, argv, "m:Z:C:M:")) != -1)
+while ((c = getopt(argc, argv, "m:Z:C:M:E:")) != -1)
 {
 switch(c)
 {
@@ -63,6 +65,10 @@ case 'C':
 case 'M':
 	matrix_flag = strtod(optarg,NULL);
 	break;
+case 'E':
+	matrix_flag = 1;
+	eff_flag = 1;
+	break;
 case '?':
 //	std::cout<<"Abandon hope all ye who enter this value. "<<std::endl;
 	std::cout<<"Allowed arguments:"<<std::endl;
@@ -70,6 +76,7 @@ case '?':
 	std::cout<<"\t-Z\tsets the Zprime mass. [default = 0.3600]"<<std::endl;
 	std::cout<<"\t-C\tsets the decay channel (0 normal threebody, 1 resonant threebody, 2 generic two body). [default = 0]"<<std::endl;
 	std::cout<<"\t-M n\tproduces a migration matrix for oberservable 'n'"<<std::endl;
+	std::cout<<"\t-E n\tproduces an efficiency matrix for oberservable 'n'"<<std::endl;
 	return 0;
 default:
 	std::cout<<"I don't know how you got here."<<std::endl;
@@ -109,14 +116,18 @@ else
 //
 detector * DETECTOR;
 
-DETECTOR = new nocuts(); 	// this is a pseudo-detector that just allows every event.
-//DETECTOR = new muBooNE(); 	// this is microboone.
+//DETECTOR = new nocuts(); 	// this is a pseudo-detector that just allows every event.
+DETECTOR = new muBooNE(); 	// this is microboone.
 
 
 if(matrix_flag == 0)
 {
 	//This is the meat of the old program
 	output_distributions(r, DETECTOR, CHAN, mS, mZprime);
+}
+else if(eff_flag == 1)
+{
+	efficiency_matrix(DETECTOR, CHAN, mS);
 }
 else
 {
@@ -178,6 +189,56 @@ if(Es>mS)
 
 return 0;
 }
+
+int efficiency_matrix(detector * DETECTOR, twoIP_channel * CHAN, double mS)
+{
+
+//For now we assume that all steriles are on axis. cos=1 phi=0
+double Emin=0.05;
+double Emax=10.0;
+double number_of_bins = 40;
+
+static OBSERVABLES Obs; //This struct is contained in "decay.h"; it specifically gives variables for a two body event (e+,e-)
+
+//These should never get changed and never used, but I thought it safe to fill them with something.
+Obs.Th_sterile = 0.0;
+Obs.E_sterile = 0.0;
+
+int m; 
+int MC_SCALE = 40000;
+
+MMHist EsumHist(100.0,0.0,5.0,MC_SCALE); //you declare the number of bins, the min value, the max value, the number of attempts (for normalizing).
+
+double Es = 1.0;
+for(Es=Emin; Es<Emax+1e-5; Es+=(Emax-Emin)/number_of_bins)
+{
+
+if(Es>mS)
+{
+	initial_sterile nus(mS, Es, 1.0-1e-7, 0.0); //I'm a little wary of putting the steriles exactly on axis... why? Test it?
+
+	EsumHist.wipe_clean();
+
+	for(m=0;m<MC_SCALE;m++)
+	{
+		//We call the appropriate functions from the channels.
+		CHAN->decayfunction(nus);
+		CHAN->observables(&Obs);
+
+		if(DETECTOR->accept(&Obs)==ACCEPTED)
+		{
+			EsumHist.add_to_histogram(Obs.E_sum);
+		}
+	}
+}
+std::cout<<Es<<" "<<EsumHist.efficiency()<<std::endl;; //this prints zero if no events have been added.
+}	
+
+
+return 0;
+}
+
+
 
 
 

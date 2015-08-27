@@ -39,6 +39,7 @@ public:
 	int wipe_clean();	
 	int add_to_histogram(double x);
 	int print(double x);
+	double efficiency();
 
 private: 
 	double binwidth;
