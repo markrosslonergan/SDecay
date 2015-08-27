@@ -149,7 +149,7 @@ Obs.E_sterile = 0.0;
 int m; 
 int MC_SCALE = 40000;
 
-MMHist EsumHist(100.0,0.0,5.0,MC_SCALE);
+MMHist EsumHist(100.0,0.0,5.0,MC_SCALE); //you declare the number of bins, the min value, the max value, the number of attempts (for normalizing).
 
 double Es = 1.0;
 for(Es=Emin; Es<Emax+1e-5; Es+=(Emax-Emin)/number_of_bins)
